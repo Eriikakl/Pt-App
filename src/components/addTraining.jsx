@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, } from '@mui/material';
 import TextField from '@mui/material/TextField';
@@ -12,10 +13,11 @@ import { DateTimePicker } from '@mui/x-date-pickers';
 export default function Addtraining(props) {
 
     const [training, setTraining] = React.useState({
+        firstname: '',
+        lastname: '',
         date: null,
         duration: '',
-        activity: '',
-        customer: null
+        activity: ''
     });
     const [customers, setCustomers] = React.useState([]);
     const link = 'https://customerrestservice-personaltraining.rahtiapp.fi/api/customers'
@@ -26,10 +28,36 @@ export default function Addtraining(props) {
         setOpen(true);
     }
     const handleSave = () => {
-            props.addTraining(training);
-            setOpen(false);
-        
-    }
+        if (!training.customer) {
+            console.error('Customer is not selected');
+            return;
+        }
+        const newTraining = {
+            ...training,
+            firstname: training.customer.value.firstname, 
+            lastname: training.customer.value.lastname,
+            date: training.date.toISOString() // Muuta päivämäärä ISO-muotoon
+        };
+        fetch('https://customerrestservice-personaltraining.rahtiapp.fi/api/trainings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newTraining)
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Training added successfully');
+                props.addTraining(newTraining);
+                setOpen(false);
+            } else {
+                console.error('Failed to add training');
+            }
+        })
+        .catch(error => {
+            console.error('Error adding training:', error);
+        });
+    };
     const handleCancel = () => {
         setOpen(false);
     }
@@ -52,16 +80,16 @@ export default function Addtraining(props) {
         <Dialog open = {open}>
             <DialogTitle>Add Trainings</DialogTitle>
             <DialogContent>
-            <Select label="Customer"
+                <Select 
+                label="Customer"
                 value={training.customer}
                 onChange={selectedOption => setTraining({ ...training, customer: selectedOption })}
                 options={customers.map(customer => ({ value: customer, label: `${customer.firstname} ${customer.lastname}` }))}
-            />
+                />
                <DateTimePicker label="Basic date time picker" 
                 onChange={date => setTraining({ ...training, date: date })}
                 value={training.date}
                 format="DD.MM.YYYY HH:mm"
-        
                 />
                 <TextField 
                     margin= "dense"

@@ -12,8 +12,7 @@ export default function Trainings() {
     const [trainings, setTrainings] = useState([]);
     const [open, setOpen] = useState(false);
     const [msg, setMsg] = useState("");
-    const link = 'https://customerrestservice-personaltraining.rahtiapp.fi/api/customers'
-    const link2 = 'https://customerrestservice-personaltraining.rahtiapp.fi/api/trainings'
+    const link = 'https://customerrestservice-personaltraining.rahtiapp.fi/gettrainings'
     const [columnDefs] = useState ([
         {headerName: 'First name' ,field: 'firstname', sortable: true, filter: true},
         {headerName: 'Last name' ,field: 'lastname', sortable: true, filter: true},
@@ -22,46 +21,28 @@ export default function Trainings() {
         {headerName: 'Duration' ,field: 'duration', sortable: true, filter: true},
         {headerName: 'Activity' ,field: 'activity', sortable: true, filter: true},
         {cellRenderer: params =>
-            <Button size="small" color="error" onClick={() => deleteTraining(params.data._links.training.href)}>Delete</Button>}
+            <Button size="small" color="error" onClick={() => deleteTraining(params.data.id)}>Delete</Button>}
     ]) //columnDefs
 
     const gridRef = useRef();
 
-    const getCustomers = () => {
+    const getTrainings = () => { 
         fetch(link, { method: 'GET' })
-        .then(response => response.json())
-        .then(data => {
-        setCustomers(data._embedded.customers);
-        data._embedded.customers.forEach(customer => { //Asiakkaiden ja harjoitusten läpikäynti
-        getTrainings(customer._links.self.href, customer.firstname, customer.lastname);
-        });
-        })
-        .catch(error => console.error(error));
-    }; //getCustomers
-
-    const getTrainings = (customerURL, firstname, lastname) => { // saimme getCustomerilta asiakkaan URL: lin,
-        fetch(customerURL, { method: 'GET' })                   // jossa on lopussa id. Myös etu- ja sukunimi haetaan
             .then(response => response.json())
             .then(data => {
-            fetch(data._links.trainings.href, { method: 'GET' }) // Haetaan asiakkaan harjoitukset
-            .then(response => response.json())
-            .then(data => {
-            const customerTrainings = data._embedded.trainings.map(training => {
-            return { // Lisätään harjoitukseen etu- ja sukunimet
-            ...training,
-            'firstname': firstname,
-            'lastname': lastname
-            };
-            });
-            setTrainings(prevTrainings => [...prevTrainings, ...customerTrainings]); // Lisätään harjoitukset
+                const updatedTrainings = data.map(training => ({
+                    ...training,
+                    firstname: training.customer ? training.customer.firstname : '',
+                    lastname: training.customer ? training.customer.lastname : ''
+                }));
+                setTrainings(updatedTrainings);
+                setCustomers(data);
             })
             .catch(error => console.error(error));
-            });
-           
-    }; //getTrainings
+    };
 
     const addTraining = (training) => {
-        fetch(link2, {
+        fetch(link, {
             method: 'POST',
             headers: {'Content-type': 'application/json'},
             body: JSON.stringify(training)
@@ -76,34 +57,38 @@ export default function Trainings() {
             }
         })
         .then(data => {
-            getCustomers();
-            console.log(training)
+            setTrainings(prevTrainings => [...prevTrainings, training]); // Lisää uusi harjoitus
+            console.log(training);
         })
-    } // addTraining
+        .catch(error => {
+            console.error('Error adding training:', error);
+        });
+    };
 
     const deleteTraining = (trainingID) => {
         const confirmed = window.confirm("Are you sure?");
-            if (!confirmed) {
+        if (!confirmed) {
             return;
-            }
-    fetch(trainingID, {method: 'DELETE'})
-    .then(response => {
-        if (response.ok) {
-            setMsg("Training deleted successfully");
-            setOpen(true);
-            getTrainings();
-    } else {
-        setMsg("Failed to delete training"); // window.alert("Something goes wrong with deleting")
-        setOpen(true);
-    }}) 
-    .catch(error => {
-        console.error(error);
-        setMsg("Something went wrong");
-        setOpen(true);
-    });
-    } //deleteTraining
+        }
+        fetch(`https://customerrestservice-personaltraining.rahtiapp.fi/api/trainings/${trainingID}`, { method: 'DELETE' })
+            .then(response => {
+                if (response.ok) {
+                    setMsg("Training deleted successfully");
+                    setOpen(true);
+                    getTrainings();
+                } else {
+                    setMsg("Failed to delete training");
+                    setOpen(true);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                setMsg("Something went wrong");
+                setOpen(true);
+            });
+    };
 
-    useEffect(() => getCustomers(), []);
+    useEffect(() => getTrainings(), []);
     
     return (
         <>
