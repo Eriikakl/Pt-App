@@ -1,10 +1,16 @@
 import './App.css'
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import {Link, Outlet} from 'react-router-dom';
+import 'dayjs/locale/fi';
 
 function App() {
   
   return (
     <>
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fi">
+      
+   
       <div className='App'>
         <nav>
         <Link to={"/"} style={{ marginRight: 100 }}>Home</Link>{' '}
@@ -13,6 +19,7 @@ function App() {
         </nav>
         <Outlet />
       </div>
+      </LocalizationProvider>
     </>
   )
 }
