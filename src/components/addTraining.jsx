@@ -27,37 +27,26 @@ export default function Addtraining(props) {
     const handleClickOpen = () => {
         setOpen(true);
     }
+
     const handleSave = () => {
         if (!training.customer) {
             console.error('Customer is not selected');
             return;
         }
+    
         const newTraining = {
             ...training,
             firstname: training.customer.value.firstname, 
             lastname: training.customer.value.lastname,
-            date: training.date.toISOString() // Muuta päivämäärä ISO-muotoon
+            date: training.date.toISOString(),
+            duration: training.duration,
+            activity: training.activity
         };
-        fetch('https://customerrestservice-personaltraining.rahtiapp.fi/api/trainings', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newTraining)
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log('Training added successfully');
-                props.addTraining(newTraining);
-                setOpen(false);
-            } else {
-                console.error('Failed to add training');
-            }
-        })
-        .catch(error => {
-            console.error('Error adding training:', error);
-        });
+    
+        props.addTraining(newTraining);
+        setOpen(false);
     };
+
     const handleCancel = () => {
         setOpen(false);
     }
@@ -68,6 +57,7 @@ export default function Addtraining(props) {
         .then(data => setCustomers(data._embedded.customers))
         .catch(error => console.error(error))
     } //getCustomers
+
     useEffect(() => {
         getCustomers();
     }, []);

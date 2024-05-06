@@ -32,8 +32,8 @@ export default function Trainings() {
             .then(data => {
                 const updatedTrainings = data.map(training => ({
                     ...training,
-                    firstname: training.customer ? training.customer.firstname : '',
-                    lastname: training.customer ? training.customer.lastname : ''
+                    firstname: training.customer && training.customer.firstname ? training.customer.firstname : '',
+                    lastname: training.customer && training.customer.lastname ? training.customer.lastname : ''
                 }));
                 setTrainings(updatedTrainings);
                 setCustomers(data);
@@ -57,7 +57,7 @@ export default function Trainings() {
             }
         })
         .then(data => {
-            setTrainings(prevTrainings => [...prevTrainings, training]); // Lisää uusi harjoitus
+            setTrainings(trainings => [...trainings, training]); // Lisää uusi harjoitus
             console.log(training);
         })
         .catch(error => {
@@ -106,8 +106,7 @@ export default function Trainings() {
                 open= {open}
                 autoHideDuration={3000}
                 onClose={() => {setOpen(false); setMsg("")}}
-                message= {msg} >
-                    
+                message= {msg} > 
             </Snackbar>
         </div>
         </>

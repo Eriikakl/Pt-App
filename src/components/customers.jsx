@@ -5,6 +5,7 @@ import "ag-grid-community/styles/ag-theme-material.css";
 import { Snackbar, Button } from '@mui/material';
 import Addcustomer from './addCustomer';
 import Editcustomer from './editCustomers';
+import ExportCustomers from './exportCustomers';
 
 export default function Customers() {
 
@@ -124,6 +125,7 @@ export default function Customers() {
                     
             </Snackbar>
         </div>
+        <ExportCustomers customers={customers} />
         </>
     ); // return
 } // Customers()
