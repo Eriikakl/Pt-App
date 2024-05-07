@@ -15,14 +15,17 @@
 
 /* own */
 
-
+.App {
+  display:flex;
+  justify-content: space-between;
+}
 
 
 /* own */
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #000000;
   text-decoration: inherit;
 }
 a:hover {

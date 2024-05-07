@@ -1,27 +1,24 @@
 import './App.css'
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import {Link, Outlet} from 'react-router-dom';
-import 'dayjs/locale/fi';
+import Navbar from './navbar'
+import Home from './components/home'
+import Customers from './components/customers'
+import Trainings from './components/trainings'
+import MyCalendar from './components/calendar'
+import MyStats from './components/stats'
+import { Routes, Route } from 'react-router-dom/dist'
 
 function App() {
   
   return (
     <>
-    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fi">
-      
-   
-      <div className='App'>
-        <nav>
-        <Link to={"/"} style={{ marginRight: 100 }}>Home</Link>{' '}
-        <Link to={"/customers"} style={{ marginRight: 100 }}>Customers</Link>{' '}
-        <Link to= {"/trainings"} style={{ marginRight: 100 }}>Trainings</Link>{' '}
-        <Link to= {"/calendar"} style={{ marginRight: 100 }}>Calendar</Link>{' '}
-        <Link to= {"/stats"}>Stats</Link>{' '}
-        </nav>
-        <Outlet />
-      </div>
-      </LocalizationProvider>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/customers" element={<Customers />} />
+        <Route path="/trainings" element={<Trainings />} />
+        <Route path="/calendar" element={<MyCalendar />} />
+        <Route path="/stats" element={<MyStats />} />
+      </Routes>
     </>
   )
 }

@@ -128,7 +128,7 @@ export default function Customers() {
 
                 </Snackbar>
             </div>
-            <ExportCustomers customers={customers} /> // Asiakastietojen tuominen CSV tiedostoon
-        </>
+            <ExportCustomers customers={customers} /> 
+        </> // Asiakastietojen tuominen CSV tiedostoon
     ); // return
 } // Customers()
