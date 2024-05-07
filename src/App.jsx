@@ -5,7 +5,7 @@ import Customers from './components/customers'
 import Trainings from './components/trainings'
 import MyCalendar from './components/calendar'
 import MyStats from './components/stats'
-import { Routes, Route } from 'react-router-dom/dist'
+import { Routes, Route } from 'react-router-dom'
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
