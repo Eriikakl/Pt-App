@@ -8,6 +8,7 @@ import Customers from './components/customers.jsx';
 import Trainings from './components/trainings.jsx'; 
 import Error from './components/error.jsx';
 import MyCalendar from './components/calendar.jsx';
+import MyStats from './components/stats.jsx';
 
 const router = createBrowserRouter([ 
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "calendar",
         element: <MyCalendar />,
+      },
+      {
+        path: "stats",
+        element: <MyStats />,
       }
     ]
   }
