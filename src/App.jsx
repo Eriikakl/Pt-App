@@ -6,11 +6,14 @@ import Trainings from './components/trainings'
 import MyCalendar from './components/calendar'
 import MyStats from './components/stats'
 import { Routes, Route } from 'react-router-dom/dist'
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 function App() {
   
   return (
     <>
+     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fi">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -19,6 +22,7 @@ function App() {
         <Route path="/calendar" element={<MyCalendar />} />
         <Route path="/stats" element={<MyStats />} />
       </Routes>
+      </LocalizationProvider>
     </>
   )
 }
