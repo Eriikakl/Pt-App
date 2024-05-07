@@ -1,5 +1,5 @@
 {
-  "homepage": "https://eriikakl.github.io/pt-app/",
+  "homepage": "https://Eriikakl.github.io/Pt-App/",
   "name": "trainee_01",
   "private": false,
   "version": "0.0.0",
@@ -29,7 +29,7 @@
     "react-csv": "^2.2.2",
     "react-dom": "^18.2.0",
     "react-moment": "^1.1.3",
-    "react-router-dom": "^6.23.0",
+    "react-router-dom": "^6.1.1",
     "react-select": "^5.8.0",
     "recharts": "^2.12.6",
     "sort-by": "^0.0.2"
